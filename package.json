@@ -1,0 +1,19 @@
+{
+    "name": "client-service",
+    "description": "client-service",
+    "version": "0.0.0",
+    "author": {
+        "name": "serandives",
+        "email": "serandives@gmail.com"
+    },
+    "dependencies": {
+        "utils": "serandules/utils#master",
+        "client": "serandules/client#master",
+        "token": "serandules/token#master",
+        "mongutils": "serandules/mongutils#master"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/serandules/client-service.git"
+    }
+}
