@@ -103,19 +103,21 @@ app.delete('/clients/:id', function (req, res) {
         .exec(function (err, client) {
             if (err) {
                 console.error('client find error');
-                res.send({
-                    error: true
+                res.send(500, {
+                    error: 'error while retrieving client'
                 });
                 return;
             }
             if (!client) {
-                res.send({
-
+                res.send(404, {
+                    error: 'specified client cannot be found'
                 });
                 return;
             }
             client.remove();
-            res.send({});
+            res.send({
+                error: false
+            });
         });
 });
 
