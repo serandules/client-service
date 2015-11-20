@@ -25,11 +25,9 @@ var fields = {
  * {"name": "serandives app"}
  */
 router.post('/clients', function (req, res) {
-    var data = req.body;
-    data.user = '522cb77187313c454a000001';
     Client.create(req.body, function (err, client) {
         if (err) {
-            console.error(err);
+            log.error(err);
             res.status(500).send({
                 error: true
             });
@@ -51,7 +49,7 @@ router.get('/clients/:id', function (req, res) {
     })
         .exec(function (err, client) {
             if (err) {
-                console.error('client find error');
+                log.error('client find error');
                 res.status(500).send({
                     error: true
                 });
@@ -83,7 +81,7 @@ router.get('/clients', function (req, res) {
         .exec(function (err, clients) {
             if (err) {
                 //TODO: send proper HTTP code
-                console.error('client find error');
+                log.error('client find error');
                 res.status(500).send({
                     error: true
                 });
@@ -105,7 +103,7 @@ router.delete('/clients/:id', function (req, res) {
     })
         .exec(function (err, client) {
             if (err) {
-                console.error('client find error');
+                log.error('client find error');
                 res.status(500).send({
                     error: 'error while retrieving client'
                 });

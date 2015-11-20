@@ -1,3 +1,3 @@
-module.exports.clean = function(o) {
+module.exports.clean = function (o) {
     return o;
 };
