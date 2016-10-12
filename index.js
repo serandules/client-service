@@ -28,9 +28,10 @@ router.post('/clients', function (req, res) {
     Client.create(req.body, function (err, client) {
         if (err) {
             log.error(err);
-            res.status(500).send({
-                error: true
-            });
+            res.status(500).send([{
+                code: 500,
+                message: 'Internal Server Error'
+            }]);
             return;
         }
         res.send(client);
@@ -39,9 +40,10 @@ router.post('/clients', function (req, res) {
 
 router.get('/clients/:id', function (req, res) {
     if (!mongutils.objectId(req.params.id)) {
-        res.status(404).send({
-            error: 'specified client cannot be found'
-        });
+        res.status(401).send([{
+            code: 401,
+            message: 'Unauthorized'
+        }]);
         return;
     }
     Client.findOne({
@@ -49,16 +51,18 @@ router.get('/clients/:id', function (req, res) {
     })
         .exec(function (err, client) {
             if (err) {
-                log.error('client find error');
-                res.status(500).send({
-                    error: true
-                });
+                log.error(err);
+                res.status(500).send([{
+                    code: 500,
+                    message: 'Internal Server Error'
+                }]);
                 return;
             }
             if (!client) {
-                res.status(404).send({
-                    error: true
-                });
+                res.status(401).send([{
+                    code: 401,
+                    message: 'Unauthorized'
+                }]);
                 return;
             }
             res.send(client);
@@ -80,11 +84,11 @@ router.get('/clients', function (req, res) {
         .sort(data.paging.sort)
         .exec(function (err, clients) {
             if (err) {
-                //TODO: send proper HTTP code
-                log.error('client find error');
-                res.status(500).send({
-                    error: true
-                });
+                log.error(err);
+                res.status(500).send([{
+                    code: 500,
+                    message: 'Internal Server Error'
+                }]);
                 return;
             }
             res.send(clients);
@@ -93,9 +97,10 @@ router.get('/clients', function (req, res) {
 
 router.delete('/clients/:id', function (req, res) {
     if (!mongutils.objectId(req.params.id)) {
-        res.status(404).send({
-            error: 'specified client cannot be found'
-        });
+        res.status(401).send([{
+            code: 401,
+            message: 'Unauthorized'
+        }]);
         return;
     }
     Client.findOne({
@@ -103,22 +108,22 @@ router.delete('/clients/:id', function (req, res) {
     })
         .exec(function (err, client) {
             if (err) {
-                log.error('client find error');
-                res.status(500).send({
-                    error: 'error while retrieving client'
-                });
+                log.error(err);
+                res.status(500).send([{
+                    code: 500,
+                    message: 'Internal Server Error'
+                }]);
                 return;
             }
             if (!client) {
-                res.status(404).send({
-                    error: 'specified client cannot be found'
-                });
+                res.status(401).send([{
+                    code: 401,
+                    message: 'Unauthorized'
+                }]);
                 return;
             }
             client.remove();
-            res.send({
-                error: false
-            });
+            res.status(204).end();
         });
 });
 
