@@ -75,10 +75,10 @@ router.get('/clients/:id', function (req, res) {
  */
 router.get('/clients', function (req, res) {
     var data = req.query.data ? JSON.parse(req.query.data) : {};
-    sanitizer.clean(data.criteria || (data.criteria = {}));
+    sanitizer.clean(data.query || (data.query = {}));
     utils.merge(data.paging || (data.paging = {}), paging);
     utils.merge(data.fields || (data.fields = {}), fields);
-    Client.find(data.criteria)
+    Client.find(data.query)
         .skip(data.paging.start)
         .limit(data.paging.count)
         .sort(data.paging.sort)
