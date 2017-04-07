@@ -1,6 +1,6 @@
 {
-    "name": "client-service",
-    "description": "client-service",
+    "name": "service-clients",
+    "description": "service-clients",
     "version": "0.0.0",
     "author": {
         "name": "serandives",
@@ -17,6 +17,6 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/serandules/client-service.git"
+        "url": "git://github.com/serandules/service-clients.git"
     }
 }

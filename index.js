@@ -1,8 +1,6 @@
-var log = require('logger')('client-service');
+var log = require('logger')('service-clients');
 var utils = require('utils');
-var Client = require('client');
-var mongoose = require('mongoose');
-var Token = require('token');
+var Client = require('model-clients');
 var mongutils = require('mongutils');
 var sanitizer = require('./sanitizer');
 
