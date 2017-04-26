@@ -1,127 +1,102 @@
 var log = require('logger')('service-clients');
-var utils = require('utils');
-var Client = require('model-clients');
-var mongutils = require('mongutils');
-var sanitizer = require('./sanitizer');
-
 var express = require('express');
-var router = express.Router();
+var bodyParser = require('body-parser');
 
-module.exports = router;
+var utils = require('utils');
+var mongutils = require('mongutils');
+var auth = require('auth');
+var serandi = require('serandi');
+var Client = require('model-clients');
 
-var paging = {
-    start: 0,
-    count: 10,
-    sort: ''
-};
+var validators = require('./validators');
+var sanitizers = require('./sanitizers');
 
-var fields = {
-    '*': true
-};
+module.exports = function (router) {
+    router.use(serandi.pond);
+    router.use(serandi.ctx);
+    router.use(auth({}));
+    router.use(bodyParser.json());
 
-/**
- * {"name": "serandives app"}
- */
-router.post('/clients', function (req, res) {
-    Client.create(req.body, function (err, client) {
-        if (err) {
-            log.error(err);
-            res.status(500).send([{
-                code: 500,
-                message: 'Internal Server Error'
-            }]);
-            return;
-        }
-        res.send(client);
-    });
-});
+    var paging = {
+        start: 0,
+        count: 10,
+        sort: ''
+    };
 
-router.get('/clients/:id', function (req, res) {
-    if (!mongutils.objectId(req.params.id)) {
-        res.status(401).send([{
-            code: 401,
-            message: 'Unauthorized'
-        }]);
-        return;
-    }
-    Client.findOne({
-        _id: req.params.id
-    })
-        .exec(function (err, client) {
+    var fields = {
+        '*': true
+    };
+
+    /**
+     * {"name": "serandives app"}
+     */
+    router.post('/', validators.create, sanitizers.create, function (req, res) {
+        Client.create(req.body, function (err, client) {
             if (err) {
                 log.error(err);
-                res.status(500).send([{
-                    code: 500,
-                    message: 'Internal Server Error'
-                }]);
-                return;
+                return res.pond(errors.serverError());
+            }
+            res.locate(client.id).status(201).send(client);
+        });
+    });
+
+    router.get('/:id', function (req, res) {
+        if (!mongutils.objectId(req.params.id)) {
+            return res.pond(errors.unauthorized());
+        }
+        Client.findOne({
+            _id: req.params.id
+        }).exec(function (err, client) {
+            if (err) {
+                log.error(err);
+                return res.pond(errors.serverError());
             }
             if (!client) {
-                res.status(401).send([{
-                    code: 401,
-                    message: 'Unauthorized'
-                }]);
-                return;
+                return res.pond(errors.unauthorized());
             }
             res.send(client);
         });
-});
+    });
 
 
-/**
- * /users?data={}
- */
-router.get('/clients', function (req, res) {
-    var data = req.query.data ? JSON.parse(req.query.data) : {};
-    sanitizer.clean(data.query || (data.query = {}));
-    utils.merge(data.paging || (data.paging = {}), paging);
-    utils.merge(data.fields || (data.fields = {}), fields);
-    Client.find(data.query)
-        .skip(data.paging.start)
-        .limit(data.paging.count)
-        .sort(data.paging.sort)
-        .exec(function (err, clients) {
+    /**
+     * /users?data={}
+     */
+    router.get('/', function (req, res) {
+        var data = req.query.data ? JSON.parse(req.query.data) : {};
+        sanitizers.clean(data.query || (data.query = {}));
+        utils.merge(data.paging || (data.paging = {}), paging);
+        utils.merge(data.fields || (data.fields = {}), fields);
+        Client.find(data.query)
+            .skip(data.paging.start)
+            .limit(data.paging.count)
+            .sort(data.paging.sort)
+            .exec(function (err, clients) {
+                if (err) {
+                    log.error(err);
+                    return res.pond(errors.serverError());
+                }
+                res.send(clients);
+            });
+    });
+
+    router.delete('/:id', function (req, res) {
+        if (!mongutils.objectId(req.params.id)) {
+            return res.pond(errors.unauthorized());
+        }
+        Client.findOne({
+            _id: req.params.id
+        }).exec(function (err, client) {
             if (err) {
                 log.error(err);
-                res.status(500).send([{
-                    code: 500,
-                    message: 'Internal Server Error'
-                }]);
-                return;
-            }
-            res.send(clients);
-        });
-});
-
-router.delete('/clients/:id', function (req, res) {
-    if (!mongutils.objectId(req.params.id)) {
-        res.status(401).send([{
-            code: 401,
-            message: 'Unauthorized'
-        }]);
-        return;
-    }
-    Client.findOne({
-        _id: req.params.id
-    })
-        .exec(function (err, client) {
-            if (err) {
-                log.error(err);
-                res.status(500).send([{
-                    code: 500,
-                    message: 'Internal Server Error'
-                }]);
-                return;
+                return res.pond(errors.serverError());
             }
             if (!client) {
-                res.status(401).send([{
-                    code: 401,
-                    message: 'Unauthorized'
-                }]);
-                return;
+                return res.pond(errors.unauthorized());
             }
             client.remove();
             res.status(204).end();
         });
-});
+    });
 
+};

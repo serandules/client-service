@@ -1,22 +1,36 @@
 {
-    "name": "service-clients",
-    "description": "service-clients",
-    "version": "0.0.0",
-    "author": {
-        "name": "serandives",
-        "email": "serandives@gmail.com"
-    },
-    "dependencies": {
-        "mongoose": "4.*",
-        "express": "4.*",
-        "logger": "serandules/logger#master",
-        "utils": "serandules/utils#master",
-        "client": "serandules/client#master",
-        "token": "serandules/token#master",
-        "mongutils": "serandules/mongutils#master"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/serandules/service-clients.git"
-    }
+  "name": "service-clients",
+  "description": "service-clients",
+  "version": "0.0.0",
+  "author": {
+    "name": "serandives",
+    "email": "serandives@gmail.com"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "mongoose": "4.*",
+    "express": "4.*",
+    "body-parser": "1.17.1",
+    "logger": "serandules/logger#master",
+    "errors": "serandules/errors#master",
+    "utils": "serandules/utils#master",
+    "auth": "serandules/auth#master",
+    "serandi": "serandules/serandi#master",
+    "validators": "serandules/validators#master",
+    "model-clients": "serandules/model-clients#master",
+    "model-tokens": "serandules/model-tokens#master",
+    "mongutils": "serandules/mongutils#master"
+  },
+  "devDependencies": {
+    "mocha": "3.2.0",
+    "should": "11.2.1",
+    "request": "2.81.0",
+    "pot": "serandules/pot#master"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/serandules/service-clients.git"
+  }
 }
