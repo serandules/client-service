@@ -11,21 +11,21 @@ var Client = require('model-clients');
 var validators = require('./validators');
 var sanitizers = require('./sanitizers');
 
+var paging = {
+    start: 0,
+    count: 10,
+    sort: ''
+};
+
+var fields = {
+    '*': true
+};
+
 module.exports = function (router) {
     router.use(serandi.pond);
     router.use(serandi.ctx);
     router.use(auth({}));
     router.use(bodyParser.json());
-
-    var paging = {
-        start: 0,
-        count: 10,
-        sort: ''
-    };
-
-    var fields = {
-        '*': true
-    };
 
     /**
      * {"name": "serandives app"}
