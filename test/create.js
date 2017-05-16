@@ -8,9 +8,13 @@ describe('POST /clients', function () {
     var client;
     before(function (done) {
         pot.start(function (err) {
-            if (err) return done(err);
+            if (err) {
+                return done(err);
+            }
             pot.client(function (err, c) {
-                if (err) return done(err);
+                if (err) {
+                    return done(err);
+                }
                 client = c;
                 done();
             });
@@ -78,11 +82,11 @@ describe('POST /clients', function () {
             if (e) {
                 return done(e);
             }
-            r.statusCode.should.equal(errors.unprocessableEntiy().status);
+            r.statusCode.should.equal(errors.unprocessableEntity().status);
             should.exist(b);
             should.exist(b.code);
             should.exist(b.message);
-            b.code.should.equal(errors.unprocessableEntiy().data.code);
+            b.code.should.equal(errors.unprocessableEntity().data.code);
             done();
         });
     });
@@ -102,11 +106,11 @@ describe('POST /clients', function () {
             if (e) {
                 return done(e);
             }
-            r.statusCode.should.equal(errors.unprocessableEntiy().status);
+            r.statusCode.should.equal(errors.unprocessableEntity().status);
             should.exist(b);
             should.exist(b.code);
             should.exist(b.message);
-            b.code.should.equal(errors.unprocessableEntiy().data.code);
+            b.code.should.equal(errors.unprocessableEntity().data.code);
             done();
         });
     });
@@ -169,8 +173,7 @@ describe('POST /clients', function () {
             uri: pot.resolve('accounts', '/apis/v/clients'),
             method: 'POST',
             json: {
-                name: 'serandives',
-                to: ['test.serandives.com/dummy']
+                to: 'test.serandives.com/dummy'
             },
             auth: {
                 bearer: client.token
@@ -179,16 +182,16 @@ describe('POST /clients', function () {
             if (e) {
                 return done(e);
             }
-            r.statusCode.should.equal(errors.unprocessableEntiy().status);
+            r.statusCode.should.equal(errors.unprocessableEntity().status);
             should.exist(b);
             should.exist(b.code);
             should.exist(b.message);
-            b.code.should.equal(errors.unprocessableEntiy().data.code);
+            b.code.should.equal(errors.unprocessableEntity().data.code);
             done();
         });
     });
 
-    it('with name and malformed to (size)', function (done) {
+    it('with name and malformed to (url length)', function (done) {
         var url = 'https://test.serandives.com/dummy';
         for (var i = 0; i < 2000; i++) {
             url += 'abcdef';
@@ -207,11 +210,41 @@ describe('POST /clients', function () {
             if (e) {
                 return done(e);
             }
-            r.statusCode.should.equal(errors.unprocessableEntiy().status);
+            r.statusCode.should.equal(errors.unprocessableEntity().status);
             should.exist(b);
             should.exist(b.code);
             should.exist(b.message);
-            b.code.should.equal(errors.unprocessableEntiy().data.code);
+            b.code.should.equal(errors.unprocessableEntity().data.code);
+            done();
+        });
+    });
+
+
+    it('with name and malformed to (size)', function (done) {
+        var url = 'https://test.serandives.com/dummy';
+        var to = [];
+        for (var i = 0; i < 6; i++) {
+            to.push(url);
+        }
+        request({
+            uri: pot.resolve('accounts', '/apis/v/clients'),
+            method: 'POST',
+            json: {
+                name: 'serandives',
+                to: to
+            },
+            auth: {
+                bearer: client.token
+            }
+        }, function (e, r, b) {
+            if (e) {
+                return done(e);
+            }
+            r.statusCode.should.equal(errors.unprocessableEntity().status);
+            should.exist(b);
+            should.exist(b.code);
+            should.exist(b.message);
+            b.code.should.equal(errors.unprocessableEntity().data.code);
             done();
         });
     });
