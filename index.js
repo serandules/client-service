@@ -6,7 +6,7 @@ var utils = require('utils');
 var mongutils = require('mongutils');
 var auth = require('auth');
 var serandi = require('serandi');
-var Client = require('model-clients');
+var Clients = require('model-clients');
 
 var validators = require('./validators');
 var sanitizers = require('./sanitizers');
@@ -31,7 +31,7 @@ module.exports = function (router) {
      * {"name": "serandives app"}
      */
     router.post('/', validators.create, sanitizers.create, function (req, res) {
-        Client.create(req.body, function (err, client) {
+        Clients.create(req.body, function (err, client) {
             if (err) {
                 log.error(err);
                 return res.pond(errors.serverError());
@@ -44,7 +44,7 @@ module.exports = function (router) {
         if (!mongutils.objectId(req.params.id)) {
             return res.pond(errors.unauthorized());
         }
-        Client.findOne({
+        Clients.findOne({
             _id: req.params.id
         }).exec(function (err, client) {
             if (err) {
@@ -67,7 +67,7 @@ module.exports = function (router) {
         sanitizers.clean(data.query || (data.query = {}));
         utils.merge(data.paging || (data.paging = {}), paging);
         utils.merge(data.fields || (data.fields = {}), fields);
-        Client.find(data.query)
+        Clients.find(data.query)
             .skip(data.paging.start)
             .limit(data.paging.count)
             .sort(data.paging.sort)
@@ -84,7 +84,7 @@ module.exports = function (router) {
         if (!mongutils.objectId(req.params.id)) {
             return res.pond(errors.unauthorized());
         }
-        Client.findOne({
+        Clients.findOne({
             _id: req.params.id
         }).exec(function (err, client) {
             if (err) {
