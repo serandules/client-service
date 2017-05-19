@@ -118,7 +118,7 @@ describe('GET /clients', function () {
         });
     });
 
-    it('GET /users/:id', function (done) {
+    it('GET /clients/:id', function (done) {
         request({
             uri: pot.resolve('accounts', '/apis/v/clients/' + clientId),
             method: 'GET',

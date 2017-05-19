@@ -84,19 +84,14 @@ module.exports = function (router) {
         if (!mongutils.objectId(req.params.id)) {
             return res.pond(errors.unauthorized());
         }
-        Clients.findOne({
+        Clients.remove({
             _id: req.params.id
-        }).exec(function (err, client) {
+        }, function (err) {
             if (err) {
                 log.error(err);
                 return res.pond(errors.serverError());
             }
-            if (!client) {
-                return res.pond(errors.unauthorized());
-            }
-            client.remove();
             res.status(204).end();
         });
     });
-
 };
