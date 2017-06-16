@@ -2,6 +2,7 @@ var log = require('logger')('service-clients');
 var express = require('express');
 var bodyParser = require('body-parser');
 
+var errors = require('errors');
 var utils = require('utils');
 var mongutils = require('mongutils');
 var auth = require('auth');
@@ -31,7 +32,9 @@ module.exports = function (router) {
      * {"name": "serandives app"}
      */
     router.post('/', validators.create, sanitizers.create, function (req, res) {
-        Clients.create(req.body, function (err, client) {
+        var data = req.body;
+        data.user = req.token.user.id
+        Clients.create(data, function (err, client) {
             if (err) {
                 log.error(err);
                 return res.pond(errors.serverError());

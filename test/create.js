@@ -139,6 +139,54 @@ describe('POST /clients', function () {
         });
     });
 
+    it('verify ownership', function (done) {
+        request({
+            uri: pot.resolve('accounts', '/apis/v/clients'),
+            method: 'POST',
+            json: {
+                name: 'serandives',
+                to: ['http://test.serandives.com/dummy']
+            },
+            auth: {
+                bearer: client.token
+            }
+        }, function (e, r, c) {
+            if (e) {
+                return done(e);
+            }
+            r.statusCode.should.equal(201);
+            should.exist(c);
+            should.exist(c.id);
+            should.exist(c.name);
+            should.exist(c.to);
+            c.name.should.equal('serandives');
+            c.to.length.should.equal(1);
+            c.to[0].should.equal('http://test.serandives.com/dummy');
+            should.exist(r.headers['location']);
+            r.headers['location'].should.equal(pot.resolve('accounts', '/apis/v/clients/' + c.id));
+            request({
+                uri: r.headers['location'],
+                method: 'GET',
+                auth: {
+                    bearer: client.token
+                },
+                json: true
+            }, function (e, r, b) {
+                if (e) {
+                    return done(e);
+                }
+                r.statusCode.should.equal(200);
+                should.exist(b);
+                should.exist(b.id);
+                should.exist(b.name);
+                b.id.should.equal(c.id);
+                b.name.should.equal(c.name);
+                done();
+            });
+        });
+    });
+
+
     it('with name and to', function (done) {
         request({
             uri: pot.resolve('accounts', '/apis/v/clients'),
