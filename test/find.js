@@ -49,7 +49,7 @@ describe('GET /clients', function () {
             uri: pot.resolve('accounts', '/apis/v/clients/' + client.serandivesId),
             method: 'GET',
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             },
             json: true
         }, function (e, r, b) {

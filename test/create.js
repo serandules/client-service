@@ -30,7 +30,7 @@ describe('POST /clients', function () {
             uri: pot.resolve('accounts', '/apis/v/clients'),
             method: 'POST',
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -54,7 +54,7 @@ describe('POST /clients', function () {
                 'Content-Type': 'application/xml'
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -76,7 +76,7 @@ describe('POST /clients', function () {
             method: 'POST',
             json: {},
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -100,7 +100,7 @@ describe('POST /clients', function () {
                 to: 'dummy'
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -123,7 +123,7 @@ describe('POST /clients', function () {
                 name: 'serandives'
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -148,7 +148,7 @@ describe('POST /clients', function () {
                 to: ['http://test.serandives.com/dummy']
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, c) {
             if (e) {
@@ -168,7 +168,7 @@ describe('POST /clients', function () {
                 uri: r.headers['location'],
                 method: 'GET',
                 auth: {
-                    bearer: client.token
+                    bearer: client.users[0].token
                 },
                 json: true
             }, function (e, r, b) {
@@ -196,7 +196,7 @@ describe('POST /clients', function () {
                 to: ['http://test.serandives.com/dummy']
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -224,7 +224,7 @@ describe('POST /clients', function () {
                 to: 'test.serandives.com/dummy'
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -252,7 +252,7 @@ describe('POST /clients', function () {
                 to: [url]
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
@@ -282,7 +282,7 @@ describe('POST /clients', function () {
                 to: to
             },
             auth: {
-                bearer: client.token
+                bearer: client.users[0].token
             }
         }, function (e, r, b) {
             if (e) {
