@@ -33,7 +33,6 @@ module.exports = function (router) {
      */
     router.post('/', validators.create, sanitizers.create, function (req, res) {
         var data = req.body;
-        data.user = req.user.id
         Clients.create(data, function (err, client) {
             if (err) {
                 log.error(err);
