@@ -8,22 +8,13 @@ var errors = require('errors');
 describe('GET /clients', function () {
     var client;
     before(function (done) {
-        pot.start(function (err) {
+        pot.client(function (err, c) {
             if (err) {
                 return done(err);
             }
-            pot.client(function (err, c) {
-                if (err) {
-                    return done(err);
-                }
-                client = c;
-                done();
-            });
+            client = c;
+            done();
         });
-    });
-
-    after(function (done) {
-        pot.stop(done);
     });
 
     it('GET /clients/:id unauthorized', function (done) {
