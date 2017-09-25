@@ -63,7 +63,7 @@ module.exports = function (router) {
     /**
      * /users?data={}
      */
-    router.get('/', function (req, res) {
+/*    router.get('/', function (req, res) {
         var data = req.query.data ? JSON.parse(req.query.data) : {};
         sanitizers.clean(data.query || (data.query = {}));
         utils.merge(data.paging || (data.paging = {}), paging);
@@ -79,7 +79,7 @@ module.exports = function (router) {
                 }
                 res.send(clients);
             });
-    });
+    });*/
 
     router.delete('/:id', function (req, res) {
         if (!mongutils.objectId(req.params.id)) {
