@@ -17,6 +17,7 @@
     "errors": "serandules/errors#master",
     "utils": "serandules/utils#master",
     "auth": "serandules/auth#master",
+    "throttle": "serandules/throttle#master",
     "serandi": "serandules/serandi#master",
     "validators": "serandules/validators#master",
     "model-clients": "serandules/model-clients#master",

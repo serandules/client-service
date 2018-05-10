@@ -6,6 +6,7 @@ var errors = require('errors');
 var utils = require('utils');
 var mongutils = require('mongutils');
 var auth = require('auth');
+var throttle = require('throttle');
 var serandi = require('serandi');
 var Clients = require('model-clients');
 
@@ -25,6 +26,7 @@ var fields = {
 module.exports = function (router) {
     router.use(serandi.ctx);
     router.use(auth({}));
+    router.use(throttle({name: 'clients'}));
     router.use(bodyParser.json());
 
     /**
