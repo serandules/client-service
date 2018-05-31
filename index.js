@@ -26,7 +26,7 @@ var fields = {
 module.exports = function (router) {
     router.use(serandi.ctx);
     router.use(auth({}));
-    router.use(throttle({name: 'clients'}));
+    router.use(throttle.apis('clients'));
     router.use(bodyParser.json());
 
     /**
