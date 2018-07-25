@@ -36,7 +36,7 @@ module.exports = function (router) {
         var data = req.body;
         Clients.create(data, function (err, client) {
             if (err) {
-                log.error(err);
+                log.error('clients:create', err);
                 return res.pond(errors.serverError());
             }
             res.locate(client.id).status(201).send(client);
@@ -51,7 +51,7 @@ module.exports = function (router) {
             _id: req.params.id
         }).exec(function (err, client) {
             if (err) {
-                log.error(err);
+                log.error('clients:find-one', err);
                 return res.pond(errors.serverError());
             }
             if (!client) {
@@ -91,7 +91,7 @@ module.exports = function (router) {
             _id: req.params.id
         }, function (err) {
             if (err) {
-                log.error(err);
+                log.error('clients:remove', err);
                 return res.pond(errors.serverError());
             }
             res.status(204).end();
