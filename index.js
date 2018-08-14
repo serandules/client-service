@@ -27,7 +27,6 @@ module.exports = function (router) {
     router.use(serandi.ctx);
     router.use(auth({}));
     router.use(throttle.apis('clients'));
-    router.use(serandi.cors);
     router.use(bodyParser.json());
 
     /**
