@@ -13,88 +13,38 @@ var Clients = require('model-clients');
 var validators = require('./validators');
 var sanitizers = require('./sanitizers');
 
-var paging = {
-    start: 0,
-    count: 10,
-    sort: ''
-};
-
-var fields = {
-    '*': true
-};
-
-module.exports = function (router) {
+module.exports = function (router, done) {
     router.use(serandi.ctx);
-    router.use(auth({}));
+    router.use(auth());
     router.use(throttle.apis('clients'));
     router.use(bodyParser.json());
 
-    /**
-     * {"name": "serandives app"}
-     */
-    router.post('/', validators.create, sanitizers.create, function (req, res) {
-        var data = req.body;
-        Clients.create(data, function (err, client) {
-            if (err) {
-                log.error('clients:create', err);
-                return res.pond(errors.serverError());
-            }
-            res.locate(client.id).status(201).send(client);
-        });
-    });
-
-    router.get('/:id', function (req, res) {
-        if (!mongutils.objectId(req.params.id)) {
-            return res.pond(errors.unauthorized());
+    router.post('/', validators.create, sanitizers.create, function (req, res, next) {
+      Clients.create(req.body, function (err, client) {
+        if (err) {
+          return next(err);
         }
-        Clients.findOne({
-            _id: req.params.id
-        }).exec(function (err, client) {
-            if (err) {
-                log.error('clients:find-one', err);
-                return res.pond(errors.serverError());
-            }
-            if (!client) {
-                return res.pond(errors.unauthorized());
-            }
-            res.send(client);
-        });
+        res.locate(client.id).status(201).send(client);
+      });
     });
 
-
-    /**
-     * /users?data={}
-     */
-/*    router.get('/', function (req, res) {
-        var data = req.query.data ? JSON.parse(req.query.data) : {};
-        sanitizers.clean(data.query || (data.query = {}));
-        utils.merge(data.paging || (data.paging = {}), paging);
-        utils.merge(data.fields || (data.fields = {}), fields);
-        Clients.find(data.query)
-            .skip(data.paging.start)
-            .limit(data.paging.count)
-            .sort(data.paging.sort)
-            .exec(function (err, clients) {
-                if (err) {
-                    log.error(err);
-                    return res.pond(errors.serverError());
-                }
-                res.send(clients);
-            });
-    });*/
-
-    router.delete('/:id', function (req, res) {
-        if (!mongutils.objectId(req.params.id)) {
-            return res.pond(errors.unauthorized());
+    router.get('/:id', validators.findOne, sanitizers.findOne, function (req, res, next) {
+      mongutils.findOne(Clients, req.query, function (err, client) {
+        if (err) {
+          return next(err);
         }
-        Clients.remove({
-            _id: req.params.id
-        }, function (err) {
-            if (err) {
-                log.error('clients:remove', err);
-                return res.pond(errors.serverError());
-            }
-            res.status(204).end();
-        });
+        res.send(client);
+      });
     });
+
+    router.delete('/:id', validators.findOne, sanitizers.findOne, function (req, res, next) {
+      mongutils.remove(Clients, req.query, function (err) {
+        if (err) {
+          return next(err);
+        }
+        res.status(204).end();
+      });
+    });
+
+    done();
 };

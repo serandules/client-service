@@ -40,7 +40,7 @@ describe('GET /clients', function () {
             uri: pot.resolve('accounts', '/apis/v/clients/' + client.serandivesId),
             method: 'GET',
             auth: {
-                bearer: client.users[0].token
+                bearer: client.admin.token
             },
             json: true
         }, function (e, r, b) {
@@ -52,7 +52,6 @@ describe('GET /clients', function () {
             should.exist(b.id);
             should.exist(b.name);
             b.id.should.equal(client.serandivesId);
-            b.name.should.equal('serandives');
             done();
         });
     });
