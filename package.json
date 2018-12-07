@@ -19,10 +19,8 @@
     "auth": "serandules/auth#master",
     "throttle": "serandules/throttle#master",
     "serandi": "serandules/serandi#master",
-    "validators": "serandules/validators#master",
-    "model-clients": "serandules/model-clients#master",
-    "model-tokens": "serandules/model-tokens#master",
-    "mongutils": "serandules/mongutils#master"
+    "model": "serandules/model#master",
+    "model-clients": "serandules/model-clients#master"
   },
   "devDependencies": {
     "mocha": "3.2.0",

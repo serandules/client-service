@@ -1,17 +1,11 @@
 var log = require('logger')('service-clients');
-var express = require('express');
 var bodyParser = require('body-parser');
 
-var errors = require('errors');
-var utils = require('utils');
-var mongutils = require('mongutils');
 var auth = require('auth');
 var throttle = require('throttle');
 var serandi = require('serandi');
+var model = require('model');
 var Clients = require('model-clients');
-
-var validators = require('./validators');
-var sanitizers = require('./sanitizers');
 
 module.exports = function (router, done) {
     router.use(serandi.ctx);
@@ -19,8 +13,11 @@ module.exports = function (router, done) {
     router.use(throttle.apis('clients'));
     router.use(bodyParser.json());
 
-    router.post('/', validators.create, sanitizers.create, function (req, res, next) {
-      Clients.create(req.body, function (err, client) {
+    router.post('/',
+      serandi.json,
+      serandi.create(Clients),
+      function (req, res, next) {
+      model.create(req.ctx, function (err, client) {
         if (err) {
           return next(err);
         }
@@ -28,8 +25,10 @@ module.exports = function (router, done) {
       });
     });
 
-    router.get('/:id', validators.findOne, sanitizers.findOne, function (req, res, next) {
-      mongutils.findOne(Clients, req.query, function (err, client) {
+    router.get('/:id',
+      serandi.findOne(Clients),
+      function (req, res, next) {
+      model.findOne(req.ctx, function (err, client) {
         if (err) {
           return next(err);
         }
@@ -37,8 +36,10 @@ module.exports = function (router, done) {
       });
     });
 
-    router.delete('/:id', validators.findOne, sanitizers.findOne, function (req, res, next) {
-      mongutils.remove(Clients, req.query, function (err) {
+    router.delete('/:id',
+      serandi.remove(Clients),
+      function (req, res, next) {
+      model.remove(req.ctx, function (err) {
         if (err) {
           return next(err);
         }
