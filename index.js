@@ -9,7 +9,12 @@ var Clients = require('model-clients');
 
 module.exports = function (router, done) {
     router.use(serandi.ctx);
-    router.use(auth());
+    router.use(auth({
+      GET: [
+        '^\/$',
+        '^\/.*'
+      ]
+    }));
     router.use(throttle.apis('clients'));
     router.use(bodyParser.json());
 
@@ -28,7 +33,7 @@ module.exports = function (router, done) {
     router.post('/:id',
       serandi.json,
       serandi.transit({
-        workflow: 'model',
+        workflow: 'model-clients',
         model: Clients
     }));
 
@@ -41,6 +46,18 @@ module.exports = function (router, done) {
         }
         res.send(client);
       });
+    });
+
+    router.put('/:id',
+      serandi.json,
+      serandi.update(Clients),
+      function (req, res, next) {
+        model.update(req.ctx, function (err, client) {
+          if (err) {
+            return next(err);
+          }
+          res.locate(client.id).status(200).send(client);
+        });
     });
 
     router.delete('/:id',

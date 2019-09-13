@@ -26,16 +26,19 @@ describe('GET /clients', function () {
             if (e) {
                 return done(e);
             }
-            r.statusCode.should.equal(errors.unauthorized().status);
+            r.statusCode.should.equal(200);
             should.exist(b);
-            should.exist(b.code);
-            should.exist(b.message);
-            b.code.should.equal(errors.unauthorized().data.code);
+            should.exist(b.id);
+            should.exist(b.name);
+            should.exist(b.description);
+            should.exist(b.to);
+            should.exist(b.to.length);
+            b.id.should.equal(client.serandivesId);
             done();
         });
     });
 
-    it('GET /clients/:id', function (done) {
+    it('GET /clients/:id admin', function (done) {
         request({
             uri: pot.resolve('accounts', '/apis/v/clients/' + client.serandivesId),
             method: 'GET',
@@ -51,6 +54,33 @@ describe('GET /clients', function () {
             should.exist(b);
             should.exist(b.id);
             should.exist(b.name);
+            should.exist(b.description);
+            should.exist(b.to);
+            should.exist(b.to.length);
+            b.id.should.equal(client.serandivesId);
+            done();
+        });
+    });
+
+    it('GET /clients/:id non-admin', function (done) {
+        request({
+            uri: pot.resolve('accounts', '/apis/v/clients/' + client.serandivesId),
+            method: 'GET',
+            auth: {
+                bearer: client.users[0].token
+            },
+            json: true
+        }, function (e, r, b) {
+            if (e) {
+                return done(e);
+            }
+            r.statusCode.should.equal(200);
+            should.exist(b);
+            should.exist(b.id);
+            should.exist(b.name);
+            should.exist(b.description);
+            should.exist(b.to);
+            should.exist(b.to.length);
             b.id.should.equal(client.serandivesId);
             done();
         });
