@@ -24,10 +24,10 @@
     "model-clients": "serandules/model-clients#master"
   },
   "devDependencies": {
-    "mocha": "4.1.0",
-    "should": "11.2.1",
+    "mocha": "^4.1.0",
+    "pot": "serandules/pot#master",
     "request": "2.81.0",
-    "pot": "serandules/pot#master"
+    "should": "11.2.1"
   },
   "repository": {
     "type": "git",

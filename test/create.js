@@ -18,7 +18,7 @@ describe('POST /clients', function () {
 
     it('with no media type', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             auth: {
                 bearer: client.users[0].token
@@ -39,7 +39,7 @@ describe('POST /clients', function () {
 
     it('with unsupported media type', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             headers: {
                 'Content-Type': 'application/xml'
@@ -63,7 +63,7 @@ describe('POST /clients', function () {
 
     it('without name', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {},
             auth: {
@@ -84,7 +84,7 @@ describe('POST /clients', function () {
 
     it('with invalid to', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {
                 name: 'serandives',
@@ -108,7 +108,7 @@ describe('POST /clients', function () {
 
     it('with name', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {
                 name: 'serandives'
@@ -125,14 +125,14 @@ describe('POST /clients', function () {
             should.exist(b.name);
             b.name.should.equal('serandives');
             should.exist(r.headers['location']);
-            r.headers['location'].should.equal(pot.resolve('accounts', '/apis/v/clients/' + b.id));
+            r.headers['location'].should.equal(pot.resolve('apis', '/v/clients/' + b.id));
             done();
         });
     });
 
     it('verify ownership', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {
                 name: 'serandives',
@@ -154,7 +154,7 @@ describe('POST /clients', function () {
             c.to.length.should.equal(1);
             c.to[0].should.equal('http://test.serandives.com/dummy');
             should.exist(r.headers['location']);
-            r.headers['location'].should.equal(pot.resolve('accounts', '/apis/v/clients/' + c.id));
+            r.headers['location'].should.equal(pot.resolve('apis', '/v/clients/' + c.id));
             request({
                 uri: r.headers['location'],
                 method: 'GET',
@@ -180,7 +180,7 @@ describe('POST /clients', function () {
 
     it('with name and to', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {
                 name: 'serandives',
@@ -202,14 +202,14 @@ describe('POST /clients', function () {
             b.to.length.should.equal(1);
             b.to[0].should.equal('http://test.serandives.com/dummy');
             should.exist(r.headers['location']);
-            r.headers['location'].should.equal(pot.resolve('accounts', '/apis/v/clients/' + b.id));
+            r.headers['location'].should.equal(pot.resolve('apis', '/v/clients/' + b.id));
             done();
         });
     });
 
     it('with name and malformed to (protocol)', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {
                 to: 'test.serandives.com/dummy'
@@ -236,7 +236,7 @@ describe('POST /clients', function () {
             url += 'abcdef';
         }
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {
                 name: 'serandives',
@@ -266,7 +266,7 @@ describe('POST /clients', function () {
             to.push(url);
         }
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients'),
+            uri: pot.resolve('apis', '/v/clients'),
             method: 'POST',
             json: {
                 name: 'serandives',

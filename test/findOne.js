@@ -19,7 +19,7 @@ describe('GET /clients', function () {
 
     it('GET /clients/:id unauthorized', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients/' + client.serandivesId),
+            uri: pot.resolve('apis', '/v/clients/' + client.serandivesId),
             method: 'GET',
             json: true
         }, function (e, r, b) {
@@ -40,7 +40,7 @@ describe('GET /clients', function () {
 
     it('GET /clients/:id admin', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients/' + client.serandivesId),
+            uri: pot.resolve('apis', '/v/clients/' + client.serandivesId),
             method: 'GET',
             auth: {
                 bearer: client.admin.token
@@ -64,7 +64,7 @@ describe('GET /clients', function () {
 
     it('GET /clients/:id non-admin', function (done) {
         request({
-            uri: pot.resolve('accounts', '/apis/v/clients/' + client.serandivesId),
+            uri: pot.resolve('apis', '/v/clients/' + client.serandivesId),
             method: 'GET',
             auth: {
                 bearer: client.users[0].token
